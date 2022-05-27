@@ -4,7 +4,7 @@ CFLAGS = -Wall -Wextra -Werror -std=c++98 -pedantic
 SANITIZE = -fsanitize=address
 RM = rm -f
 
-SRC = ConvertChar.cpp\
+SRC = Convert.cpp\
 
 MAIN = main.cpp
 
