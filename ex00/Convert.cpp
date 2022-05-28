@@ -6,7 +6,7 @@
 /*   By: nfernand <nfernand@student.42kl.edu.m      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 17:28:12 by nfernand          #+#    #+#             */
-/*   Updated: 2022/05/27 17:53:44 by nfernand         ###   ########.fr       */
+/*   Updated: 2022/05/28 16:50:31 by nazrinsha        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ using	std::string;
 
 bool	isNumber(string &str);
 bool	isFloat(string &str);
+bool	isDouble(string &str);
 
 Convert::Convert()
 {
@@ -51,6 +52,7 @@ Convert::Convert(char *original_string)
 	this->_char_scalar = 0;
 	this->_float_scalar = 0;
 	this->_double_scalar = 0;
+	this->_overflow_scalar = 0;
 	this->_valid = 1;
 
 	this->_special_value = "";
@@ -120,15 +122,18 @@ void		Convert::printConversion(void)
 	}
 	else
 	{
-		if (this->_int_scalar < 0 || this->_int_scalar > 127)
+		if (this->_double_scalar < 0 || this->_double_scalar > 127)
 			cout << YELLOW "char: [impossible]" RESET << endl;
-		else if (this->_int_scalar < 32)
+		else if (this->_double_scalar < 32)
 			cout << YELLOW "char: [Non Displayable]" RESET << endl;
 		else
 			cout << YELLOW "char: [" << this->_char_scalar << "]" RESET << endl;
-		cout << BLUE "int: [" << this->_int_scalar << "]" RESET << endl;
-		cout << MAGENTA "float: [" << std::fixed << std::setprecision(5) << this->_float_scalar << "]" RESET << endl;
-		cout << CYAN "double: [" << std::fixed << std::setprecision(5) << this->_double_scalar << "]" RESET << endl;
+		if (this->_valid == -1)
+			cout << BLUE "int: [impossible]" RESET << endl;
+		else
+			cout << BLUE "int: [" << this->_int_scalar << "]" RESET << endl;
+		cout << MAGENTA "float: [" << std::fixed << std::setprecision(1) << this->_float_scalar << "f]" RESET << endl;
+		cout << CYAN "double: [" << std::fixed << std::setprecision(1) << this->_double_scalar << "]" RESET << endl;
 	}
 
 	//setprecision sets to the entire number instead of the fractional part, so std::fixed will make it apply to the fractional part
@@ -172,6 +177,12 @@ void		Convert::handleNumericCase(void)
 		convertFloat();
 		return ;
 	}
+	cout << "is Double: " << (isDouble(str) ? (GREEN "true" RESET) : (RED "false" RESET)) << endl;
+	if (isDouble(str))
+	{
+		convertDouble();	
+		return ;
+	}
 }
 
 void		Convert::convertChar(void)
@@ -188,33 +199,53 @@ void		Convert::convertInt(void)
 {
 	string		str = this->_original_string;
 
-	if (stoll(str) > INT_MAX || stoll(str) < INT_MIN)
-	{
-		if (stoll(str) > INT_MAX)
-			this->_int_scalar = INT_MAX;
-		else
-			this->_int_scalar = INT_MIN;
-		this->_float_scalar = static_cast<float>(stoll(str));
-		this->_double_scalar= static_cast<double>(stoll(str));
-	}
-	else
+	try
 	{
 		this->_int_scalar = stoi(str);
 		this->_char_scalar = static_cast<char>(this->_int_scalar);
 		this->_float_scalar = static_cast<float>(this->_int_scalar);
 		this->_double_scalar= static_cast<double>(this->_int_scalar);
 	}
+	catch (std::out_of_range)
+	{
+		this->_overflow_scalar = static_cast<double>(atof(str.c_str()));
+		this->_valid = -1;
+		this->_char_scalar = static_cast<char>(this->_overflow_scalar);
+		this->_float_scalar = static_cast<float>(this->_overflow_scalar);
+		this->_double_scalar= static_cast<double>(this->_overflow_scalar);
+	}
 }
 
 void		Convert::convertFloat(void)
 {
 	//stof is a c++ 11 feature
-	this->_float_scalar = atof(this->_original_string);
+	//atof returns a double??
+	long		int_overflow;
+
+	this->_float_scalar = static_cast<float>(atof(this->_original_string));
 	this->_char_scalar = static_cast<char>(this->_float_scalar);
 	this->_int_scalar = static_cast<int>(this->_float_scalar);
 	this->_double_scalar = static_cast<double>(this->_float_scalar);
+
+	int_overflow = static_cast<long>(this->_float_scalar);
+	if (int_overflow > INT_MAX || int_overflow < INT_MIN)
+		this->_valid = -1;
 }
 
+void		Convert::convertDouble(void)
+{
+	long		int_overflow;
+
+	this->_double_scalar = static_cast<double>(atof(this->_original_string));
+	this->_char_scalar = static_cast<char>(this->_double_scalar);
+	this->_int_scalar = static_cast<int>(this->_double_scalar);
+	this->_float_scalar = static_cast<float>(this->_double_scalar);
+
+	int_overflow = static_cast<long>(this->_float_scalar);
+	if (int_overflow > INT_MAX || int_overflow < INT_MIN 
+			|| this->_double_scalar > INT_MAX || this->_double_scalar < INT_MIN)
+		this->_valid = -1;
+}
 
 /*
  *	UTILS
@@ -236,19 +267,15 @@ bool		isFloat(string &str)
 {
 	int		decimal_count = 0;
 
-//	cout << endl << "str size:" << str.size() << endl;
 	for (std::string::size_type i = 0; i < str.size(); i++)
 	{
 		if ((str[0] == '-' || str[0] == '+') && i == 0)
 			continue ;
-
-//		cout << "i: " << i << " size-1: " << str.size() - 1 << endl;
-		if (i == (str.size() - 1) && str[i] == 'f')
+		if (i == (str.size() - 1))
 		{
-//			cout << endl << "entered" << endl;
-//			cout << str[i] << endl;
-//			cout << str.size() << endl;
-			return true;
+			if (str[i] == 'f')
+				return true;
+			return false;
 		}
 		if (std::isdigit(str[i]) == 0)
 		{
@@ -256,18 +283,33 @@ bool		isFloat(string &str)
 			{
 				decimal_count++;
 				if (decimal_count > 1)
-				{
-//					cout << endl << "entered dc" << endl;
 					return false;
-				}
 			}
 			else
-			{
-//				cout << endl << "index:" << str.size() - 1 << endl;
-//				cout << endl << "invalid char" << endl;
-//				cout << str[i] << endl;
 				return false;
+		}
+	}
+	return true;
+}
+
+bool		isDouble(string &str)
+{
+	int		decimal_count = 0;
+
+	for (std::string::size_type i = 0; i < str.size(); i++)
+	{
+		if ((str[0] == '-' || str[0] == '+') && i == 0)
+			continue ;
+		if (std::isdigit(str[i]) == 0)
+		{
+			if (str[i] == '.')
+			{
+				decimal_count++;
+				if (decimal_count > 1)
+					return false;
 			}
+			else
+				return false;
 		}
 	}
 	return true;

@@ -6,7 +6,7 @@
 /*   By: nfernand <nfernand@student.42kl.edu.m      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 17:26:16 by nfernand          #+#    #+#             */
-/*   Updated: 2022/05/27 17:29:39 by nfernand         ###   ########.fr       */
+/*   Updated: 2022/05/28 16:05:57 by nazrinsha        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ class	Convert
 		void				convertChar(void);
 		void				convertInt(void);
 		void				convertFloat(void);
+		void				convertDouble(void);
 		void				handleSpecialCase(void);
 		void				handleNumericCase(void);
 
@@ -52,6 +53,7 @@ class	Convert
 		int					_int_scalar;
 		float				_float_scalar;
 		double				_double_scalar;
+		double				_overflow_scalar;
 		
 };
 
