@@ -6,7 +6,7 @@
 /*   By: nfernand <nfernand@student.42kl.edu.m      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 17:17:16 by nfernand          #+#    #+#             */
-/*   Updated: 2022/05/28 16:26:55 by nazrinsha        ###   ########.fr       */
+/*   Updated: 2022/06/21 16:02:21 by nfernand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@
 #include "colours.h"
 
 #include "Convert.hpp"
+
+#include <string>
+#include <cstring>
 
 using	std::cout;
 using	std::endl;
@@ -33,5 +36,4 @@ int	main(int argc, char **argv)
 		cout << RED "Please pass in an argument" RESET << endl;
 	else
 		cout << RED "Please only pass in one argument" RESET << endl;
-	
 }

@@ -6,7 +6,7 @@
 /*   By: nfernand <nfernand@student.42kl.edu.m      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 17:28:12 by nfernand          #+#    #+#             */
-/*   Updated: 2022/05/28 16:50:31 by nazrinsha        ###   ########.fr       */
+/*   Updated: 2022/06/21 16:02:33 by nfernand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,8 +86,10 @@ void		Convert::handleInput(void)
 	this->handleSpecialCase();
 	if (this->_special_case == 1)
 		return ;
-	else if ((strlen(this->_original_string) == 1) && (isalpha(this->_original_string[0])))
+	else if ((strlen(this->_original_string) == 1)
+				&& (this->_original_string[0] >= 0 && this->_original_string[0] <= 127))
 	{
+		cout << "entered" << endl;
 		this->_char_case = 1;
 		convertChar();
 		return ;
@@ -109,12 +111,12 @@ void		Convert::printConversion(void)
 	{
 		cout << YELLOW "char: [impossible]" RESET << endl;
 		cout << BLUE "int: [impossible]" RESET << endl;
-		if (this->_special_value == "inff" || this->_special_value == "+inff" 
+		if (this->_special_value == "inff" || this->_special_value == "+inff"
 				|| this->_special_value == "-inff" || this->_special_value == "nanf")
 			cout << MAGENTA "float: [" << this->_special_value << "]" RESET << endl;
 		else
 			cout << MAGENTA "float: [impossible]" RESET << endl;
-		if (this->_special_value == "inf" || this->_special_value == "+inf" 
+		if (this->_special_value == "inf" || this->_special_value == "+inf"
 				|| this->_special_value == "-inf" || this->_special_value == "nan")
 			cout << CYAN "double: [" << this->_special_value << "]" RESET << endl;
 		else
@@ -152,7 +154,7 @@ void		Convert::handleSpecialCase(void)
 		if (lowercase_str == array[i])
 		{
 			if (this->_print_init)
-				cout << "special case str: " << lowercase_str << endl;  
+				cout << "special case str: " << lowercase_str << endl;
 			this->_special_value = lowercase_str;
 			this->_special_case = 1;
 		}
@@ -180,7 +182,7 @@ void		Convert::handleNumericCase(void)
 	cout << "is Double: " << (isDouble(str) ? (GREEN "true" RESET) : (RED "false" RESET)) << endl;
 	if (isDouble(str))
 	{
-		convertDouble();	
+		convertDouble();
 		return ;
 	}
 }
@@ -204,7 +206,7 @@ void		Convert::convertInt(void)
 		this->_int_scalar = stoi(str);
 		this->_char_scalar = static_cast<char>(this->_int_scalar);
 		this->_float_scalar = static_cast<float>(this->_int_scalar);
-		this->_double_scalar= static_cast<double>(this->_int_scalar);
+		this->_double_scalar = static_cast<double>(this->_int_scalar);
 	}
 	catch (std::out_of_range)
 	{
@@ -212,7 +214,7 @@ void		Convert::convertInt(void)
 		this->_valid = -1;
 		this->_char_scalar = static_cast<char>(this->_overflow_scalar);
 		this->_float_scalar = static_cast<float>(this->_overflow_scalar);
-		this->_double_scalar= static_cast<double>(this->_overflow_scalar);
+		this->_double_scalar = static_cast<double>(this->_overflow_scalar);
 	}
 }
 
@@ -242,7 +244,7 @@ void		Convert::convertDouble(void)
 	this->_float_scalar = static_cast<float>(this->_double_scalar);
 
 	int_overflow = static_cast<long>(this->_float_scalar);
-	if (int_overflow > INT_MAX || int_overflow < INT_MIN 
+	if (int_overflow > INT_MAX || int_overflow < INT_MIN
 			|| this->_double_scalar > INT_MAX || this->_double_scalar < INT_MIN)
 		this->_valid = -1;
 }
@@ -260,7 +262,7 @@ bool		isNumber(string &str)
 		if (std::isdigit(str[i]) == 0)
 			return false;
 	}
-    return true;
+	return true;
 }
 
 bool		isFloat(string &str)

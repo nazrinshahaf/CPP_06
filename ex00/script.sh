@@ -1,47 +1,65 @@
-#./convert inf
-#echo "\n"
-#
-#./convert +inf
-#echo "\n"
-#
-#./convert -inf
-#echo "\n"
-#
-#./convert inff
-#echo "\n"
-#
-#./convert +inff
-#echo "\n"
-#
-#./convert -inff
-#echo "\n"
-#
-#./convert nan
-#echo "\n"
-#
-#./convert nanf
-#echo "\n"
+./convert inf
+echo "\n"
 
-#c=$(echo {a..z} | tr -d ' ')
-#for i in {1..5}
-#do
-#	x=${c:$((RANDOM%26+1)):1}
-#    ./convert $x
-#done
-#
-#c=$(echo {A..Z} | tr -d ' ')
-#for i in {1..5}
-#do
-#	x=${c:$((RANDOM%26+1)):1}
-#    ./convert $x
-#done
-#
-#c=$(echo {1..10} | tr -d ' ')
-#for i in {1..5}
-#do
-#	x=${c:$((RANDOM%10+1)):1}
-#    ./convert $x
-#done
+./convert +inf
+echo "\n"
+
+./convert -inf
+echo "\n"
+
+./convert inff
+echo "\n"
+
+./convert +inff
+echo "\n"
+
+./convert -inff
+echo "\n"
+
+./convert nan
+echo "\n"
+
+./convert nanf
+echo "\n"
+
+echo "=================== Char ====================\n"
+
+c=$(echo {a..z} | tr -d ' ')
+for i in {1..5}
+do
+	x=${c:$((RANDOM%26+1)):1}
+    ./convert $x
+done
+
+c=$(echo {A..Z} | tr -d ' ')
+for i in {1..5}
+do
+	x=${c:$((RANDOM%26+1)):1}
+    ./convert $x
+done
+
+echo "============= non-print char ===============\n"
+
+unprint=$(printf '\000')
+./convert $unprint
+
+unprint=$(printf '\001')
+./convert $unprint
+
+unprint=$(printf '\012')
+./convert $unprint
+
+unprint=$(printf '\027')
+./convert $unprint
+
+echo "=============================================\n\n"
+
+c=$(echo {1..10} | tr -d ' ')
+for i in {1..5}
+do
+	x=${c:$((RANDOM%10+1)):1}
+    ./convert $x
+done
 
 echo "===============INT_MAX - 1===================\n"
 ./convert 2147483647

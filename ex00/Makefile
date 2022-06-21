@@ -26,7 +26,7 @@ leaks: re
 	./$(NAME)
 
 test: re
-	$(re) ./$(NAME) 0
+	$(re) ./$(NAME)
 
 san: fclean 
 	$(fclean)

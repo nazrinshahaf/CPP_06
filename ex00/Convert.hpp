@@ -6,7 +6,7 @@
 /*   By: nfernand <nfernand@student.42kl.edu.m      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 17:26:16 by nfernand          #+#    #+#             */
-/*   Updated: 2022/05/28 16:05:57 by nazrinsha        ###   ########.fr       */
+/*   Updated: 2022/06/21 13:21:03 by nfernand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ class	Convert
 		float				_float_scalar;
 		double				_double_scalar;
 		double				_overflow_scalar;
-		
+
 };
 
 #endif
