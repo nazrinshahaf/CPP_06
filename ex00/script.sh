@@ -27,14 +27,14 @@ echo "=================== Char ====================\n"
 c=$(echo {a..z} | tr -d ' ')
 for i in {1..5}
 do
-	x=${c:$((RANDOM%26+1)):1}
+	x=${c:$((RANDOM%25+1)):1}
     ./convert $x
 done
 
 c=$(echo {A..Z} | tr -d ' ')
 for i in {1..5}
 do
-	x=${c:$((RANDOM%26+1)):1}
+	x=${c:$((RANDOM%25+1)):1}
     ./convert $x
 done
 
@@ -46,20 +46,31 @@ unprint=$(printf '\000')
 unprint=$(printf '\001')
 ./convert $unprint
 
-unprint=$(printf '\012')
+unprint=$(printf '\021')
 ./convert $unprint
 
-unprint=$(printf '\027')
+unprint=$(printf '\023')
 ./convert $unprint
 
 echo "=============================================\n\n"
 
-c=$(echo {1..10} | tr -d ' ')
+echo "=================== Int =====================\n"
+
+c=$(echo {1..50} | tr -d ' ')
 for i in {1..5}
 do
-	x=${c:$((RANDOM%10+1)):1}
+	x=${c:$((RANDOM%50+1)):1}
     ./convert $x
 done
+
+c=$(echo {1..10000} | tr -d ' ')
+for i in {1..5}
+do
+	x=${c:$((RANDOM%10000+1)):1}
+    ./convert $x
+done
+
+echo "=============================================\n\n"
 
 echo "===============INT_MAX - 1===================\n"
 ./convert 2147483647

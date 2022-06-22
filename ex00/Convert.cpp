@@ -6,7 +6,7 @@
 /*   By: nfernand <nfernand@student.42kl.edu.m      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 17:28:12 by nfernand          #+#    #+#             */
-/*   Updated: 2022/06/21 16:02:33 by nfernand         ###   ########.fr       */
+/*   Updated: 2022/06/22 14:00:08 by nfernand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <string>
 #include <climits>
 #include <iomanip>
+#include <cstdlib>
 
 #include "Convert.hpp"
 
@@ -46,7 +47,6 @@ Convert::Convert(char *original_string)
 		cout << GREEN "Default Assignment Constructor called" RESET << endl;
 	this->_special_case = 0;
 	this->_char_case = 0;
-	this->_int_case = 0;
 
 	this->_int_scalar = 0;
 	this->_char_scalar = 0;
@@ -76,33 +76,39 @@ Convert		&Convert::operator=(Convert const &tocopy)
 
 void		Convert::convertInput(void)
 {
-	handleInput();
-	printConversion();
+	if (handleInput())
+		printConversion();
 }
 
-void		Convert::handleInput(void)
+int			Convert::handleInput(void)
 {
 	string		str;
 	this->handleSpecialCase();
 	if (this->_special_case == 1)
-		return ;
+		return (1);
 	else if ((strlen(this->_original_string) == 1)
-				&& (this->_original_string[0] >= 0 && this->_original_string[0] <= 127))
+				&& (this->_original_string[0] >= 0 && this->_original_string[0] <= 127)
+				&& std::isdigit(this->_original_string[0]) == 0)
 	{
-		cout << "entered" << endl;
+		cout << "is Char: " GREEN "true" RESET << endl;
 		this->_char_case = 1;
 		convertChar();
-		return ;
+		return (1);
 	}
 	else if ((this->_original_string[0] >= '0' && this->_original_string[0] <= '9')
 			|| this->_original_string[0] == '-' || this->_original_string[0] == '+')
 	{
+		cout << "is Char: " RED "false" RESET << endl;
+		cout << "is Number: " RED "false" RESET << endl;
+		cout << "is Float: " RED "false" RESET << endl;
+		cout << "is Double: " RED "false" RESET << endl;
 		//idk why i did eveyrthing before this in char *
 		//check for alphabets that are not f
-		handleNumericCase();
-		return ;
+		if (handleNumericCase())
+			return (1);
 	}
 	cout << RED "DOENST MATCH ANYTHING" RESET << endl;
+	return (0);
 }
 
 void		Convert::printConversion(void)
@@ -161,7 +167,7 @@ void		Convert::handleSpecialCase(void)
 	}
 }
 
-void		Convert::handleNumericCase(void)
+int	Convert::handleNumericCase(void)
 {
 	string		str = this->_original_string;
 
@@ -169,22 +175,25 @@ void		Convert::handleNumericCase(void)
 	cout << "is Number: " << (isNumber(str) ? (GREEN "true" RESET) : (RED "false" RESET)) << endl;
 	if (isNumber(str))
 	{
-		this->_int_case = 1;
+		cout << "is Float: " RED "false" RESET << endl;
+		cout << "is Double: " RED "false" RESET << endl;
 		convertInt();
-		return ;
+		return (1);
 	}
 	cout << "is Float: " << (isFloat(str) ? (GREEN "true" RESET) : (RED "false" RESET)) << endl;
 	if (isFloat(str))
 	{
+		cout << "is Double: " RED "false" RESET << endl;
 		convertFloat();
-		return ;
+		return (1);
 	}
 	cout << "is Double: " << (isDouble(str) ? (GREEN "true" RESET) : (RED "false" RESET)) << endl;
 	if (isDouble(str))
 	{
 		convertDouble();
-		return ;
+		return (1);
 	}
+	return (0);
 }
 
 void		Convert::convertChar(void)
@@ -218,34 +227,53 @@ void		Convert::convertInt(void)
 	}
 }
 
+/*
+ *	cout << "double scalar: " << this->_double_scalar << endl;
+ *	cout << "float scalar: " << this->_float_scalar << endl;
+ *	cout << "int_scalar: " << this->_int_scalar << endl;
+ *	cout << "int overflow: " << int_overflow << endl;
+ *	cout << "int real: " << int_real << endl;
+ *	if (int_overflow > INT_MAX || int_overflow < INT_MIN
+ *			|| this->_double_scalar > INT_MAX || this->_double_scalar < INT_MIN)
+ *	if (int_overflow > INT_MAX || int_overflow < INT_MIN)
+ *		this->_valid = -1;
+ * */
+
 void		Convert::convertFloat(void)
 {
 	//stof is a c++ 11 feature
 	//atof returns a double??
 	long		int_overflow;
+	int			int_real;
 
 	this->_float_scalar = static_cast<float>(atof(this->_original_string));
 	this->_char_scalar = static_cast<char>(this->_float_scalar);
-	this->_int_scalar = static_cast<int>(this->_float_scalar);
-	this->_double_scalar = static_cast<double>(this->_float_scalar);
+	this->_double_scalar = static_cast<double>(atof(this->_original_string));
 
 	int_overflow = static_cast<long>(this->_float_scalar);
-	if (int_overflow > INT_MAX || int_overflow < INT_MIN)
+	int_real = static_cast<int>(atoi(this->_original_string));
+	this->_int_scalar = int_real;
+
+	if (std::abs(this->_double_scalar - int_real) > INT_MAX
+			|| std::abs(int_overflow - int_real) > INT_MAX)
 		this->_valid = -1;
 }
 
 void		Convert::convertDouble(void)
 {
 	long		int_overflow;
+	int			int_real;
 
 	this->_double_scalar = static_cast<double>(atof(this->_original_string));
 	this->_char_scalar = static_cast<char>(this->_double_scalar);
-	this->_int_scalar = static_cast<int>(this->_double_scalar);
-	this->_float_scalar = static_cast<float>(this->_double_scalar);
+	this->_float_scalar = static_cast<float>(atof(this->_original_string));
 
 	int_overflow = static_cast<long>(this->_float_scalar);
-	if (int_overflow > INT_MAX || int_overflow < INT_MIN
-			|| this->_double_scalar > INT_MAX || this->_double_scalar < INT_MIN)
+	int_real = static_cast<int>(atoi(this->_original_string));
+	this->_int_scalar = int_real;
+
+	if (std::abs(this->_double_scalar - int_real) > INT_MAX
+			|| std::abs(int_overflow - int_real) > INT_MAX)
 		this->_valid = -1;
 }
 

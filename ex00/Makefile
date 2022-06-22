@@ -3,6 +3,7 @@ CC = c++
 CFLAGS = -Wall -Wextra -Werror -std=c++98 -pedantic
 SANITIZE = -fsanitize=address
 RM = rm -f
+SCRIPT_SRC = script.sh
 
 SRC = Convert.cpp\
 
@@ -27,6 +28,9 @@ leaks: re
 
 test: re
 	$(re) ./$(NAME)
+
+s: re
+	$(re) ./$(SCRIPT_SRC)
 
 san: fclean 
 	$(fclean)

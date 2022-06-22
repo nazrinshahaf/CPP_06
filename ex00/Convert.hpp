@@ -6,7 +6,7 @@
 /*   By: nfernand <nfernand@student.42kl.edu.m      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 17:26:16 by nfernand          #+#    #+#             */
-/*   Updated: 2022/06/21 13:21:03 by nfernand         ###   ########.fr       */
+/*   Updated: 2022/06/22 13:07:10 by nfernand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,14 @@ class	Convert
 	private:
 		Convert();
 
-		void				handleInput(void);
+		int					handleInput(void);
 		void				printConversion(void);
 		void				convertChar(void);
 		void				convertInt(void);
 		void				convertFloat(void);
 		void				convertDouble(void);
 		void				handleSpecialCase(void);
-		void				handleNumericCase(void);
+		int					handleNumericCase(void);
 
 		static const bool 	_print_init = false;
 
@@ -46,7 +46,6 @@ class	Convert
 
 		int					_special_case;
 		int					_char_case;
-		int					_int_case;
 
 		string				_special_value;
 		char				_char_scalar;
