@@ -7,6 +7,9 @@ echo "\n"
 ./convert -inf
 echo "\n"
 
+./convert nan
+echo "\n"
+
 ./convert inff
 echo "\n"
 
@@ -14,9 +17,6 @@ echo "\n"
 echo "\n"
 
 ./convert -inff
-echo "\n"
-
-./convert nan
 echo "\n"
 
 ./convert nanf
@@ -29,6 +29,7 @@ for i in {1..5}
 do
 	x=${c:$((RANDOM%25+1)):1}
     ./convert $x
+	printf '\n'
 done
 
 c=$(echo {A..Z} | tr -d ' ')
@@ -36,21 +37,26 @@ for i in {1..5}
 do
 	x=${c:$((RANDOM%25+1)):1}
     ./convert $x
+	printf '\n'
 done
 
 echo "============= non-print char ===============\n"
 
 unprint=$(printf '\000')
 ./convert $unprint
+printf '\n'
 
 unprint=$(printf '\001')
 ./convert $unprint
+printf '\n'
 
 unprint=$(printf '\021')
 ./convert $unprint
+printf '\n'
 
 unprint=$(printf '\023')
 ./convert $unprint
+printf '\n'
 
 echo "=============================================\n\n"
 
@@ -61,6 +67,7 @@ for i in {1..5}
 do
 	x=${c:$((RANDOM%50+1)):1}
     ./convert $x
+	printf '\n'
 done
 
 c=$(echo {1..10000} | tr -d ' ')
@@ -68,6 +75,7 @@ for i in {1..5}
 do
 	x=${c:$((RANDOM%10000+1)):1}
     ./convert $x
+	printf '\n'
 done
 
 echo "=============================================\n\n"

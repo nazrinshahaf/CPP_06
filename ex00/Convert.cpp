@@ -6,7 +6,7 @@
 /*   By: nfernand <nfernand@student.42kl.edu.m      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 17:28:12 by nfernand          #+#    #+#             */
-/*   Updated: 2022/06/22 14:00:08 by nfernand         ###   ########.fr       */
+/*   Updated: 2022/07/21 11:14:59 by nfernand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ Convert::Convert(char *original_string)
 	this->_overflow_scalar = 0;
 	this->_valid = 1;
 
-	this->_special_value = "";
+	this->_special_value_float = "";
+	this->_special_value_double = "";
 	this->_original_string = original_string;
 }
 
@@ -85,12 +86,18 @@ int			Convert::handleInput(void)
 	string		str;
 	this->handleSpecialCase();
 	if (this->_special_case == 1)
+	{
+		cout << "is Special Case: " GREEN "true" RESET << endl;
 		return (1);
+	}
 	else if ((strlen(this->_original_string) == 1)
 				&& (this->_original_string[0] >= 0 && this->_original_string[0] <= 127)
 				&& std::isdigit(this->_original_string[0]) == 0)
 	{
 		cout << "is Char: " GREEN "true" RESET << endl;
+		cout << "is Number: " RED "false" RESET << endl;
+		cout << "is Float: " RED "false" RESET << endl;
+		cout << "is Double: " RED "false" RESET << endl;
 		this->_char_case = 1;
 		convertChar();
 		return (1);
@@ -99,9 +106,6 @@ int			Convert::handleInput(void)
 			|| this->_original_string[0] == '-' || this->_original_string[0] == '+')
 	{
 		cout << "is Char: " RED "false" RESET << endl;
-		cout << "is Number: " RED "false" RESET << endl;
-		cout << "is Float: " RED "false" RESET << endl;
-		cout << "is Double: " RED "false" RESET << endl;
 		//idk why i did eveyrthing before this in char *
 		//check for alphabets that are not f
 		if (handleNumericCase())
@@ -117,16 +121,8 @@ void		Convert::printConversion(void)
 	{
 		cout << YELLOW "char: [impossible]" RESET << endl;
 		cout << BLUE "int: [impossible]" RESET << endl;
-		if (this->_special_value == "inff" || this->_special_value == "+inff"
-				|| this->_special_value == "-inff" || this->_special_value == "nanf")
-			cout << MAGENTA "float: [" << this->_special_value << "]" RESET << endl;
-		else
-			cout << MAGENTA "float: [impossible]" RESET << endl;
-		if (this->_special_value == "inf" || this->_special_value == "+inf"
-				|| this->_special_value == "-inf" || this->_special_value == "nan")
-			cout << CYAN "double: [" << this->_special_value << "]" RESET << endl;
-		else
-			cout << CYAN "double: [impossible]" RESET << endl;
+		cout << MAGENTA "float: [" << this->_special_value_float << "]" RESET << endl;
+		cout << CYAN "double: [" << this->_special_value_double << "]" RESET << endl;
 	}
 	else
 	{
@@ -151,7 +147,7 @@ void		Convert::printConversion(void)
 void		Convert::handleSpecialCase(void)
 {
 	string		lowercase_str = this->_original_string;
-	string		array[] = {"inf", "-inf", "+inf", "inff", "-inff", "+inff", "nan", "nanf", ""};
+	string		array[] = {"inf", "-inf", "+inf", "nan", "inff", "-inff", "+inff", "nanf", ""};
 
 	std::transform(lowercase_str.begin(), lowercase_str.end(), lowercase_str.begin(), ::tolower);
 
@@ -161,8 +157,18 @@ void		Convert::handleSpecialCase(void)
 		{
 			if (this->_print_init)
 				cout << "special case str: " << lowercase_str << endl;
-			this->_special_value = lowercase_str;
-			this->_special_case = 1;
+			if (i < 4)
+			{
+				this->_special_value_double = lowercase_str;
+				this->_special_value_float = lowercase_str + "f";
+				this->_special_case = 1;
+			}
+			else
+			{
+				this->_special_value_double = lowercase_str.substr(0, lowercase_str.size() - 1);
+				this->_special_value_float = lowercase_str;
+				this->_special_case = 1;
+			}
 		}
 	}
 }

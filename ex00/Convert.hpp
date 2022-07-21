@@ -6,7 +6,7 @@
 /*   By: nfernand <nfernand@student.42kl.edu.m      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/26 17:26:16 by nfernand          #+#    #+#             */
-/*   Updated: 2022/06/22 13:07:10 by nfernand         ###   ########.fr       */
+/*   Updated: 2022/07/21 11:07:03 by nfernand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,8 @@ class	Convert
 		int					_special_case;
 		int					_char_case;
 
-		string				_special_value;
+		string				_special_value_float;
+		string				_special_value_double;
 		char				_char_scalar;
 		int					_int_scalar;
 		float				_float_scalar;
