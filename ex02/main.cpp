@@ -6,7 +6,7 @@
 /*   By: nfernand <nfernand@student.42kl.edu.m      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 17:22:04 by nfernand          #+#    #+#             */
-/*   Updated: 2022/06/23 15:27:13 by nfernand         ###   ########.fr       */
+/*   Updated: 2022/07/21 11:40:35 by nfernand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,11 +80,11 @@ int	main()
 	cout << endl;
 
 	cout << MAGENTA "Printing the type of derived class using when passed as pointer..." RESET << endl;
-	new_base->identify(new_base);
+	identify(new_base);
 	cout << endl;
 
 	cout << MAGENTA "Printing the type of derived class using when passed as reference..." RESET << endl;
-	new_base->identify(*new_base);
+	identify(*new_base);
 
 	delete new_base;
 	return (0);
