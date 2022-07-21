@@ -6,7 +6,7 @@
 /*   By: nfernand <nfernand@student.42kl.edu.m      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/05/30 11:07:43 by nfernand          #+#    #+#             */
-/*   Updated: 2022/06/22 14:13:55 by nfernand         ###   ########.fr       */
+/*   Updated: 2022/07/21 11:27:02 by nfernand         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,14 @@ int		main()
 	cout << endl;
 
 	cout << MAGENTA "Deserializing Data..." RESET << endl;
-	Data	*reversedtest = deserialization(serial);
+	Data	*deserial = deserialization(serial);
 	cout << MAGENTA "Printing value of serialized data..." RESET << endl;
-	cout << reversedtest << endl;
-	cout << *reversedtest << endl;
+	cout << deserial << endl;
+	cout << *deserial << endl;
 
 	cout << MAGENTA "Comparing initial and start values..." RESET << endl;
 	cout << "Data is ";
-	if (data == reversedtest)
+	if (data == deserial)
 		cout << "the" GREEN " same" RESET;
 	else
 		cout << RED "not the same" RESET;
